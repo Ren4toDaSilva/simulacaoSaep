@@ -5,8 +5,7 @@ Aplicação web para gerenciamento de tarefas no formato Kanban.
 ## Diagrama US
 ![](https://raw.githubusercontent.com/samuelmarc/simsaep/refs/heads/main/US.png)
 
-## Diagrama DER
-![](https://raw.githubusercontent.com/samuelmarc/simsaep/refs/heads/main/DER.png)
+👤 Autor: Renato Tilger da Silva
 
 ## Tecnologias
 
