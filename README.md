@@ -1,120 +1,116 @@
-# SAEP Kanban — Gerenciador de Tarefas
+# Sistema de Gerenciamento de Tarefas
 
-> **Simulação SAEP** — Projeto de desenvolvimento de software
+Aplicação web para gerenciamento de tarefas no formato Kanban.
 
----
+## Diagrama US
+![](https://raw.githubusercontent.com/samuelmarc/simsaep/refs/heads/main/US.png)
 
-👤 Autor: Renatp Tilger da Silva
+## Diagrama DER
+![](https://raw.githubusercontent.com/samuelmarc/simsaep/refs/heads/main/DER.png)
 
----
+## Tecnologias
 
- 📋 Descrição do Projeto
+- **Backend:** Node.js + Express + PostgreSQL
+- **Frontend:** Bootstrap 5 + JavaScript
 
-Aplicação web de **gerenciamento de tarefas no formato Kanban** desenvolvida para uma indústria do ramo alimentício. O sistema permite o controle visual das tarefas por meio de três colunas de status:
+## Pré-requisitos
 
-| Coluna | Descrição |
-|---|---|
-| 🔵 **A Fazer** | Tarefas ainda não iniciadas |
-| 🟠 **Fazendo** | Tarefas em andamento |
-| 🟢 **Pronto** | Tarefas concluídas |
+- Node.js 18+
+- PostgreSQL 14+
 
----
+## Instalação
 
-## 🛠️ Tecnologias Utilizadas
+### 1. Banco de dados
 
-- **HTML5** — Estrutura da aplicação
-- **CSS3** — Estilização com variáveis CSS e responsividade
-- **JavaScript (Vanilla)** — Lógica da aplicação e persistência via `localStorage`
-- **SQL (MySQL)** — Modelagem relacional do banco de dados
+Crie o banco no PostgreSQL:
 
----
-
-## 📁 Estrutura do Repositório
-
-```
-/
-├── index.html          ← Aplicação principal (SPA)
-├── setup_banco.sql     ← Script SQL de criação e configuração do banco
-├── README.md           ← Este arquivo
-└── docs/
-    ├── der.png         ← Diagrama Entidade-Relacionamento (DER)
-    └── caso_de_uso.png ← Diagrama de Caso de Uso
+```sql
+CREATE DATABASE task_manager;
 ```
 
----
+### 2. Backend
 
-## ⚙️ Funcionalidades
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edite o `.env` com suas credenciais do PostgreSQL:
+
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=sua_senha
+DB_NAME=task_manager
+PORT=3000
+```
+
+Instale as dependências e inicie o servidor:
+
+```bash
+npm install
+npm start
+```
+
+O servidor irá criar as tabelas automaticamente na primeira execução.
+
+### 3. Acesso
+
+Abra o navegador em: [http://localhost:3000](http://localhost:3000)
+
+## Estrutura do Projeto
+
+```
+task-manager/
+├── backend/
+│   ├── routes/
+│   │   ├── usuarios.js
+│   │   └── tarefas.js
+│   ├── db.js
+│   ├── server.js
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── utils.js
+│   │   ├── kanban.js
+│   │   ├── usuarios.js
+│   │   └── tarefas.js
+│   ├── index.html      ← Tela inicial (Quadro Kanban)
+│   ├── usuarios.html   ← Cadastro de usuários
+│   └── tarefas.html    ← Cadastro de tarefas
+└── database.sql
+```
+
+## Funcionalidades
+
+- **Quadro Kanban** com colunas: A Fazer, Fazendo, Pronto
+- **Cadastro de usuários** com validação de e-mail
+- **Cadastro de tarefas** com associação a usuário, setor e prioridade
+- **Edição de tarefas** com modal
+- **Exclusão de tarefas** com confirmação
+- **Alteração de status** direto nos cards
+
+## API Endpoints
 
 ### Usuários
-- ✅ Cadastrar usuário (nome + e-mail)
-- ✅ Validação de e-mail (formato e duplicidade)
-- ✅ Editar usuário
-- ✅ Excluir usuário (com confirmação)
-- ✅ Listagem em tabela
+| Método | Rota              | Descrição          |
+|--------|-------------------|--------------------|
+| GET    | /api/usuarios     | Listar todos       |
+| GET    | /api/usuarios/:id | Buscar por ID      |
+| POST   | /api/usuarios     | Criar              |
+| PUT    | /api/usuarios/:id | Atualizar          |
+| DELETE | /api/usuarios/:id | Remover            |
 
 ### Tarefas
-- ✅ Cadastrar tarefa (vinculada a um usuário)
-- ✅ Campos: descrição, setor, prioridade (Baixa / Média / Alta)
-- ✅ Status inicial automático: **A Fazer**
-- ✅ Alterar status diretamente no quadro Kanban
-- ✅ Editar tarefa (redireciona com campos preenchidos)
-- ✅ Excluir tarefa (com confirmação)
-
-### Quadro Kanban
-- ✅ Visualização em 3 colunas por status
-- ✅ Filtros por setor, prioridade e usuário
-- ✅ Painel de estatísticas (total, em andamento, concluídas, alta prioridade)
-
----
-
-## 🎨 Identidade Visual
-
-| Elemento | Valor |
-|---|---|
-| Fonte | `Segoe UI` |
-| Cor principal | `#0056b3` (Azul) |
-| Cor secundária | `#FFFFFF` (Branco) |
-| Cor de texto | `#000000` (Preto) |
-
----
-
-## 🗄️ Banco de Dados
-
-### Tabela `usuarios`
-| Campo | Tipo | Restrições |
-|---|---|---|
-| `id` | INT | PK, AUTO_INCREMENT |
-| `nome` | VARCHAR(100) | NOT NULL |
-| `email` | VARCHAR(150) | NOT NULL, UNIQUE |
-
-### Tabela `tarefas`
-| Campo | Tipo | Restrições |
-|---|---|---|
-| `id` | INT | PK, AUTO_INCREMENT |
-| `usuario_id` | INT | FK → usuarios(id) |
-| `descricao` | TEXT | NOT NULL |
-| `setor` | VARCHAR(60) | NOT NULL |
-| `prioridade` | ENUM | Baixa / Média / Alta |
-| `data_cadastro` | DATE | NOT NULL, DEFAULT hoje |
-| `status` | ENUM | A Fazer / Fazendo / Pronto |
-
-**Relacionamento:** Um usuário pode ter várias tarefas; uma tarefa pertence a apenas um usuário (1:N).
-
----
-
-## 🚀 Como Executar
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/SEU_USUARIO/saep-kanban.git
-   ```
-2. Abra o arquivo `index.html` em qualquer navegador moderno.
-3. (Opcional) Execute o `setup_banco.sql` em um servidor MySQL para configurar o banco.
-
----
-
-## 📚 Observações
-
-- Os dados da versão web são persistidos no **localStorage** do navegador.
-- Todos os campos de cadastro são obrigatórios e possuem validação.
-- A aplicação é **responsiva** e funciona em dispositivos móveis.
+| Método | Rota                     | Descrição             |
+|--------|--------------------------|-----------------------|
+| GET    | /api/tarefas             | Listar todas          |
+| GET    | /api/tarefas/:id         | Buscar por ID         |
+| POST   | /api/tarefas             | Criar                 |
+| PUT    | /api/tarefas/:id         | Atualizar             |
+| PATCH  | /api/tarefas/:id/status  | Alterar status        |
+| DELETE | /api/tarefas/:id         | Remover               |
