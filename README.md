@@ -4,7 +4,7 @@
 
 ---
 
-👤 Autor: Renatp Tilger da Silva
+👤 Autor: Renato Tilger da Silva
 
 ---
 
